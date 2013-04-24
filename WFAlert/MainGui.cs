@@ -49,7 +49,7 @@ namespace WFAlert
             timer_data.Tick += new EventHandler(CheckTweets);
             timer_time.Tick += new EventHandler(UpdateTime);
 
-            timer_data.Interval = (1000) * (60);    // Timer will tick every minute
+            timer_data.Interval = (1000) * (120);   // Timer will tick every 2 minutes
             timer_data.Enabled = true;              // Enable the timer
             timer_data.Start();                     // Start the timer
 
