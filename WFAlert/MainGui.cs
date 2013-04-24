@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Media;
 using System.Windows.Forms;
 using LinqToTwitter;
 
@@ -238,7 +239,10 @@ namespace WFAlert
                     DataObj.ID = statusTweets.ElementAt(k).StatusID;
 
                     if ((DataObj.Timeleft != 0) && ((DataObj.Reward != "") || (Convert.ToInt32(DataObj.Credits) >= 400)))   // If still available and has a bp/artifact/lots of credits add it
+                    {
                         DataList.Add(DataObj);
+                        PlaySound();
+                    }
                 }
             }
         }
@@ -249,6 +253,12 @@ namespace WFAlert
                 if (ad.ID == input)
                     return false;
             return true;
+        }
+
+        private void PlaySound()
+        {
+            SoundPlayer simpleSound = new SoundPlayer(@"C:\alertsound.wav");
+            simpleSound.Play();
         }
     }
 }
