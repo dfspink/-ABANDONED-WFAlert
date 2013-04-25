@@ -23,7 +23,7 @@ namespace WFAlert
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             TM.Run();
-            MainGui GUI = new MainGui();
+            MainGUI GUI = new MainGUI();
             Application.Run(GUI);
         }
     }

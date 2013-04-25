@@ -1,6 +1,6 @@
 ﻿namespace WFAlert
 {
-    partial class MainGui
+    partial class MainGUI
     {
         /// <summary>
         /// Required designer variable.

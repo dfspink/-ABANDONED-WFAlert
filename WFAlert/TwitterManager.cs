@@ -70,7 +70,7 @@ namespace WFAlert
             }
             catch (WebException wex)
             {
-                MessageBox.Show("Webexeption says: \n" + wex.Message);
+                MessageBox.Show("Web exception says: \n" + wex.Message);
             }
 
             File.WriteAllLines(CredentialsFile, new string[] { auth.Credentials.ToString() });

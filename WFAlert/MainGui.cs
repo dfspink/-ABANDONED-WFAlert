@@ -13,7 +13,7 @@ using System.Diagnostics;   // debug
 
 namespace WFAlert
 {
-    public partial class MainGui : Form
+    public partial class MainGUI : Form
     {
         Timer timer_data = new Timer();
         Timer timer_time = new Timer();
@@ -25,7 +25,7 @@ namespace WFAlert
         const int count = 2;
         const string twittername = "WarframeAlerts";
 
-        public MainGui()
+        public MainGUI()
         {
             InitializeComponent();
             InitData();
