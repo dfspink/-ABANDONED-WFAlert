@@ -20,7 +20,8 @@ namespace WFAlert
 
         List<AlertData> DataList = new List<AlertData>(0);
 
-        System.Linq.IQueryable<Status> statusTweets;
+        List<Status> statusTweets;
+
         string sinceid="";
         const int count = 2;
         const string twittername = "WarframeAlerts";
@@ -34,10 +35,17 @@ namespace WFAlert
 
         private void InitData()
         {
-            if (PullData())
+            if (CheckLimit())
             {
-                ParseData();
-                UpdateRTB();
+                try
+                {
+                    PullData();
+                    ParseData();
+                    UpdateRTB();
+                }
+                catch
+                {
+                }
             }
         }
 
@@ -49,7 +57,7 @@ namespace WFAlert
             timer_data.Tick += new EventHandler(CheckTweets);
             timer_time.Tick += new EventHandler(UpdateTime);
 
-            timer_data.Interval = (1000) * (120);   // Timer will tick every 2 minutes
+            timer_data.Interval = (1000) * (60);    // Timer will tick every minute
             timer_data.Enabled = true;              // Enable the timer
             timer_data.Start();                     // Start the timer
 
@@ -155,37 +163,38 @@ namespace WFAlert
         /// <param name="e"></param>
         private void CheckTweets(object sender, EventArgs e)
         {
-            if (PullData())
+            if (CheckLimit())
             {
+                PullData();
                 ParseData();
                 UpdateRTB();
             }
         }
 
+        /// <summary>
+        /// Checks if remaining rate limit is greater than amount if tweets to pull (count).
+        /// </summary>
+        /// <returns></returns>
         private bool CheckLimit()
         {
-            return (WFAlert.TM.GetCtx().RateLimitRemaining >= 2);
+            return ((WFAlert.TM.GetCtx().RateLimitRemaining >= count) || (WFAlert.TM.GetCtx().RateLimitRemaining == -1));
         }
 
         /// <summary>
         /// Gets data from twitter.
         /// </summary>
-        private bool PullData()
+        private void PullData()
         {
-            statusTweets =
+            statusTweets = (
                 from tweet in WFAlert.TM.GetCtx().Status
                 where tweet.Type == StatusType.User
                         && tweet.ScreenName == twittername
                         && tweet.ExcludeReplies == true
                         && tweet.Count == count
-                select tweet;
+                select tweet).ToList();
 
             if (statusTweets.Count() != 0)
                 sinceid = statusTweets.Max(status => status.StatusID);
-
-            if (CheckLimit())
-                return true;
-            return false;
         }
 
         /// <summary>
@@ -196,7 +205,6 @@ namespace WFAlert
             int[] location;
             AlertData DataObj;
 
-            
             for (int k=0; k < statusTweets.Count(); ++k)
             {
                 if (NotInList(statusTweets.ElementAt(k).StatusID))
